@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Warehouse – Grupo 15</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:    #F5EDD8;
+    --beige:    #E8D9B8;
+    --sand:     #D4BC8A;
+    --caramel:  #B8925A;
+    --coffee:   #7B5533;
+    --espresso: #4A2E1A;
+    --gold:     #C9953A;
+    --gold-lt:  #E8B84B;
+    --gold-dk:  #A07020;
+    --amber:    #D4882A;
+    --white:    #FFF9EE;
+    --text-dk:  #2E1A0E;
+    --text-md:  #5C3D20;
+    --text-lt:  #8B6040;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: #2a1a0e;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* A4 = 794 × 1123 px at 96dpi */
+  .page {
+    width: 794px;
+    min-height: 1123px;
+    background: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── decorative background geometry ── */
+  .page::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--gold-lt) 0%, var(--caramel) 60%, transparent 70%);
+    opacity: .18;
+  }
+  .page::after {
+    content: '';
+    position: absolute;
+    bottom: 120px; left: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--coffee) 0%, transparent 70%);
+    opacity: .12;
+  }
+
+  /* ═══════════ HEADER ═══════════ */
+  .header {
+    background: linear-gradient(135deg, var(--espresso) 0%, var(--coffee) 50%, var(--gold-dk) 100%);
+    padding: 28px 36px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255,255,255,.03) 10px,
+      rgba(255,255,255,.03) 20px
+    );
+  }
+  .header-inner { position: relative; z-index:1; display:flex; align-items:center; gap:20px; }
+
+  .header-icon {
+    width: 64px; height: 64px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--gold-lt), var(--amber));
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,.35);
+  }
+  .header-icon svg { width:36px; height:36px; }
+
+  .header-text h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold-lt);
+    letter-spacing: -.5px;
+    line-height: 1;
+    text-shadow: 0 2px 8px rgba(0,0,0,.4);
+  }
+  .header-text .subtitle {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--sand);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 4px;
+  }
+
+  .grupo-badge {
+    margin-left: auto;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(201,149,58,.5);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--sand);
+    letter-spacing: 1.5px;
+  }
+
+  /* ── gold divider bar ── */
+  .gold-bar {
+    height: 4px;
+    background: linear-gradient(90deg, var(--espresso), var(--gold-lt) 30%, var(--amber) 60%, var(--espresso));
+  }
+
+  /* ═══════════ BODY ═══════════ */
+  .body { padding: 22px 28px 20px; }
+
+  /* ── section label ── */
+  .section-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--gold-dk);
+    margin-bottom: 8px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 18px; height: 2px;
+    background: var(--gold);
+  }
+
+  /* ── DEFINICIÓN ── */
+  .def-box {
+    background: linear-gradient(135deg, var(--espresso), var(--coffee));
+    border-radius: 16px;
+    padding: 18px 22px;
+    display: flex; gap: 16px; align-items: flex-start;
+    box-shadow: 0 6px 24px rgba(74,46,26,.3);
+    margin-bottom: 18px;
+  }
+  .def-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    color: var(--gold-lt);
+    line-height: .8;
+    flex-shrink: 0;
+    margin-top: -4px;
+  }
+  .def-text {
+    color: var(--cream);
+    font-size: 12.5px;
+    line-height: 1.65;
+    font-weight: 300;
+  }
+  .def-text strong { color: var(--gold-lt); font-weight: 600; }
+
+  /* ── PROPOSITO ── */
+  .purposes {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    margin-bottom: 18px;
+  }
+  .purpose-card {
+    background: var(--white);
+    border: 1.5px solid var(--beige);
+    border-radius: 12px;
+    padding: 12px 10px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s;
+  }
+  .purpose-card::before {
+    content: '';
+    position: absolute; top:0; left:0; right:0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--caramel), var(--gold-lt));
+  }
+  .purpose-card .p-icon {
+    font-size: 22px; margin-bottom: 6px; display: block;
+  }
+  .purpose-card h4 {
+    font-size: 10px; font-weight: 600;
+    color: var(--coffee);
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .purpose-card p {
+    font-size: 9.5px; color: var(--text-lt);
+    line-height: 1.5;
+  }
+
+  /* ── ETL FLOW ── */
+  .etl-section { margin-bottom: 18px; }
+
+  .etl-flow {
+    display: flex; align-items: stretch; gap: 0;
+    background: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1.5px solid var(--beige);
+    box-shadow: 0 3px 14px rgba(74,46,26,.1);
+  }
+  .etl-step {
+    flex: 1;
+    padding: 14px 12px;
+    text-align: center;
+    position: relative;
+  }
+  .etl-step:not(:last-child)::after {
+    content: '▶';
+    position: absolute; right: -8px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 13px;
+    z-index: 2;
+  }
+  .etl-step.src { background: linear-gradient(180deg, #FFF9EE, #F0E2C4); }
+  .etl-step.ext { background: linear-gradient(180deg, #EDD5A8, #E0C080); }
+  .etl-step.trf { background: linear-gradient(180deg, #D4A84B, #C09030); }
+  .etl-step.ld  { background: linear-gradient(180deg, #8B6020, #7B5015); }
+  .etl-step.dw  { background: linear-gradient(180deg, var(--espresso), var(--coffee)); }
+  .etl-step.out { background: linear-gradient(180deg, #4A2E1A, #2E1A0A); }
+
+  .etl-step .step-icon { font-size: 20px; margin-bottom: 5px; display: block; }
+  .etl-step .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; font-weight: 500;
+    color: rgba(255,255,255,.5);
+    margin-bottom: 2px;
+  }
+  .etl-step.src .step-num, .etl-step.ext .step-num { color: var(--text-lt); }
+  .etl-step h4 { font-size: 10px; font-weight: 600; }
+  .etl-step.src h4, .etl-step.ext h4 { color: var(--espresso); }
+  .etl-step.trf h4 { color: var(--espresso); }
+  .etl-step.ld h4, .etl-step.dw h4, .etl-step.out h4 { color: var(--gold-lt); }
+  .etl-step p { font-size: 8.5px; margin-top: 3px; }
+  .etl-step.src p, .etl-step.ext p { color: var(--text-md); }
+  .etl-step.trf p { color: var(--espresso); }
+  .etl-step.ld p, .etl-step.dw p, .etl-step.out p { color: var(--sand); }
+
+  /* ── INTEGRATION MAP ── */
+  .integration-section { margin-bottom: 18px; }
+
+  .integration-wrapper {
+    position: relative;
+    height: 290px;
+    background: linear-gradient(135deg, var(--espresso) 0%, #3a2010 40%, var(--coffee) 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(74,46,26,.35);
+  }
+  /* subtle grid lines */
+  .integration-wrapper::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(201,149,58,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,149,58,.07) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* SVG connection lines live here */
+  .int-svg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+  }
+
+  /* Center DW node */
+  .dw-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    width: 110px; height: 110px;
+    background: linear-gradient(135deg, var(--gold-lt), var(--amber));
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    box-shadow: 0 0 0 8px rgba(201,149,58,.2), 0 0 0 16px rgba(201,149,58,.08), 0 0 40px rgba(201,149,58,.3);
+    z-index: 10;
+    text-align: center;
+  }
+  .dw-center .dw-emoji { font-size: 28px; line-height:1; }
+  .dw-center .dw-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 11px; font-weight: 700;
+    color: var(--espresso);
+    margin-top: 3px; line-height: 1.1;
+  }
+
+  /* Satellite tech nodes */
+  .tech-node {
+    position: absolute;
+    width: 76px; height: 76px;
+    background: rgba(255,249,238,.08);
+    backdrop-filter: blur(4px);
+    border: 1.5px solid rgba(201,149,58,.35);
+    border-radius: 14px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    transform: translate(-50%,-50%);
+    z-index: 5;
+    transition: transform .3s, box-shadow .3s;
+  }
+  .tech-node:hover {
+    transform: translate(-50%,-50%) scale(1.08);
+    box-shadow: 0 4px 20px rgba(201,149,58,.3);
+  }
+  .tech-node .tn-icon { font-size: 20px; line-height:1; margin-bottom:3px; }
+  .tech-node .tn-name {
+    font-size: 9px; font-weight: 700;
+    color: var(--gold-lt);
+    text-transform: uppercase; letter-spacing: .8px;
+  }
+  .tech-node .tn-desc {
+    font-size: 7.5px; color: var(--sand);
+    margin-top: 2px; line-height: 1.3;
+  }
+
+  /* positions: 8 nodes around center (397, 145) */
+  /* center approx at 53% x 50% → 420px, 145px */
+
+  /* ── COMPONENTS + AREAS TWO-COL ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+
+  .comp-box, .areas-box {
+    background: var(--white);
+    border: 1.5px solid var(--beige);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: 0 3px 12px rgba(74,46,26,.08);
+  }
+
+  .comp-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--beige);
+  }
+  .comp-item:last-child { border-bottom: none; }
+  .comp-dot {
+    width: 32px; height: 32px; flex-shrink: 0;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+  }
+  .comp-item h5 { font-size: 10.5px; font-weight: 600; color: var(--coffee); }
+  .comp-item p  { font-size: 9px; color: var(--text-lt); line-height: 1.4; }
+
+  .area-chip {
+    display: flex; align-items: center; gap: 8px;
+    background: linear-gradient(90deg, rgba(184,146,90,.12), transparent);
+    border-left: 3px solid var(--caramel);
+    border-radius: 0 8px 8px 0;
+    padding: 7px 10px;
+    margin-bottom: 6px;
+  }
+  .area-chip:last-child { margin-bottom: 0; }
+  .area-chip span { font-size: 14px; }
+  .area-chip div h5 { font-size: 10px; font-weight: 600; color: var(--coffee); }
+  .area-chip div p  { font-size: 8.5px; color: var(--text-lt); }
+
+  /* ── EXAMPLES ── */
+  .examples-section { margin-bottom: 16px; }
+  .examples-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .ex-card {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 14px rgba(74,46,26,.12);
+  }
+  .ex-header {
+    padding: 10px 12px 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ex-header .ex-icon { font-size: 18px; }
+  .ex-header h4 { font-size: 10px; font-weight: 700; }
+  .ex-body {
+    padding: 8px 12px 10px;
+    background: var(--white);
+  }
+  .ex-body p { font-size: 9px; color: var(--text-lt); line-height: 1.55; }
+  .ex-body .ex-tag {
+    display: inline-block;
+    background: var(--beige);
+    color: var(--coffee);
+    font-size: 7.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    border-radius: 4px;
+    padding: 2px 6px;
+    margin-top: 5px;
+  }
+
+  .ex-card.retail .ex-header { background: linear-gradient(135deg, #7B5533, #9B7040); }
+  .ex-card.retail .ex-header h4 { color: var(--gold-lt); }
+  .ex-card.bank .ex-header   { background: linear-gradient(135deg, #4A2E1A, #6B4525); }
+  .ex-card.bank .ex-header h4 { color: var(--gold-lt); }
+  .ex-card.health .ex-header { background: linear-gradient(135deg, #B8925A, #D4A870); }
+  .ex-card.health .ex-header h4 { color: var(--espresso); }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: linear-gradient(90deg, var(--espresso), var(--coffee));
+    padding: 12px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-left {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; color: var(--sand);
+    letter-spacing: 1.5px;
+  }
+  .footer-center {
+    display: flex; gap: 6px; align-items: center;
+  }
+  .f-pill {
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(201,149,58,.3);
+    border-radius: 10px;
+    padding: 3px 9px;
+    font-size: 8px; color: var(--sand);
+    letter-spacing: .5px;
+  }
+  .footer-right {
+    font-size: 9px; color: var(--text-lt);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ═══ HEADER ═══ -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="header-icon">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- cylinder stack icon -->
+          <ellipse cx="18" cy="9" rx="13" ry="4.5" fill="#4A2E1A" opacity=".9"/>
+          <rect x="5" y="9" width="26" height="8" fill="#4A2E1A" opacity=".7"/>
+          <ellipse cx="18" cy="17" rx="13" ry="4.5" fill="#4A2E1A" opacity=".85"/>
+          <rect x="5" y="17" width="26" height="8" fill="#4A2E1A" opacity=".6"/>
+          <ellipse cx="18" cy="25" rx="13" ry="4.5" fill="#4A2E1A"/>
+          <!-- highlights -->
+          <ellipse cx="14" cy="8.5" rx="4" ry="1.5" fill="rgba(255,249,200,.3)"/>
+          <ellipse cx="14" cy="16.5" rx="4" ry="1.5" fill="rgba(255,249,200,.2)"/>
+          <ellipse cx="14" cy="24.5" rx="4" ry="1.5" fill="rgba(255,249,200,.15)"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1>DATA WAREHOUSE</h1>
+        <div class="subtitle">Tecnología de Información · Almacén Empresarial de Datos</div>
+      </div>
+      <div class="grupo-badge">GRUPO 15</div>
+    </div>
+  </div>
+  <div class="gold-bar"></div>
+
+  <!-- ═══ BODY ═══ -->
+  <div class="body">
+
+    <!-- DEFINICIÓN -->
+    <div class="section-label">01 · Definición</div>
+    <div class="def-box">
+      <div class="def-quote">"</div>
+      <div class="def-text">
+        Un <strong>Data Warehouse (DW)</strong> es un repositorio central de datos integrados, históricos y orientados a la toma de decisiones empresariales. Consolida información proveniente de múltiples fuentes heterogéneas —transaccionales, operacionales y externas— en una única estructura optimizada para <strong>consultas analíticas y generación de inteligencia de negocios (BI)</strong>. A diferencia de las bases de datos OLTP, está diseñado para <strong>OLAP</strong>: lecturas masivas, agregaciones y análisis multidimensional.
+      </div>
+    </div>
+
+    <!-- PROPÓSITO -->
+    <div class="section-label">02 · Propósito Funcional</div>
+    <div class="purposes">
+      <div class="purpose-card">
+        <span class="p-icon">🎯</span>
+        <h4>Integración</h4>
+        <p>Unifica datos dispersos en una fuente única y confiable</p>
+      </div>
+      <div class="purpose-card">
+        <span class="p-icon">⏳</span>
+        <h4>Histórico</h4>
+        <p>Conserva datos a lo largo del tiempo para análisis de tendencias</p>
+      </div>
+      <div class="purpose-card">
+        <span class="p-icon">📊</span>
+        <h4>Análisis</h4>
+        <p>Habilita consultas complejas y reportes de alto rendimiento</p>
+      </div>
+      <div class="purpose-card">
+        <span class="p-icon">🧠</span>
+        <h4>Decisiones</h4>
+        <p>Sustenta la estrategia con datos precisos y consistentes</p>
+      </div>
+    </div>
+
+    <!-- ETL PIPELINE -->
+    <div class="etl-section">
+      <div class="section-label">03 · Proceso ETL y Arquitectura de Datos</div>
+      <div class="etl-flow">
+        <div class="etl-step src">
+          <span class="step-icon">🗄️</span>
+          <div class="step-num">PASO 1</div>
+          <h4>FUENTES</h4>
+          <p>ERP, CRM, BD operacionales, archivos externos</p>
+        </div>
+        <div class="etl-step ext">
+          <span class="step-icon">📤</span>
+          <div class="step-num">PASO 2</div>
+          <h4>EXTRACCIÓN</h4>
+          <p>Captura de datos brutos desde cada origen</p>
+        </div>
+        <div class="etl-step trf">
+          <span class="step-icon">⚙️</span>
+          <div class="step-num">PASO 3</div>
+          <h4>TRANSFORMACIÓN</h4>
+          <p>Limpieza, normalización y enriquecimiento</p>
+        </div>
+        <div class="etl-step ld">
+          <span class="step-icon">📥</span>
+          <div class="step-num">PASO 4</div>
+          <h4>CARGA</h4>
+          <p>Inserción estructurada en el almacén central</p>
+        </div>
+        <div class="etl-step dw">
+          <span class="step-icon">🏛️</span>
+          <div class="step-num">NÚCLEO</div>
+          <h4>DATA WAREHOUSE</h4>
+          <p>Repositorio integrado y optimizado</p>
+        </div>
+        <div class="etl-step out">
+          <span class="step-icon">📈</span>
+          <div class="step-num">SALIDA</div>
+          <h4>BI & ANÁLISIS</h4>
+          <p>Dashboards, reportes y minería de datos</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTEGRATION MAP -->
+    <div class="integration-section">
+      <div class="section-label">04 · Ecosistema de Integración con TI</div>
+      <div class="integration-wrapper">
+
+        <!-- SVG connection lines -->
+        <svg class="int-svg" viewBox="0 0 738 290" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+          <defs>
+            <marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#C9953A" opacity=".7"/>
+            </marker>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+              <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <!-- center = 369, 145 -->
+          <!-- ERP  top-left  140,62 -->
+          <line x1="178" y1="85" x2="325" y2="130" stroke="#C9953A" stroke-width="1.5" stroke-dasharray="5,4" opacity=".6" marker-end="url(#arr)" filter="url(#glow)"/>
+          <!-- CRM  top-right 595,62 -->
+          <line x1="557" y1="85" x2="415" y2="130" stroke="#C9953A" stroke-width="1.5" stroke-dasharray="5,4" opacity=".6" marker-end="url(#arr)" filter="url(#glow)"/>
+          <!-- BPM  left      65,145 -->
+          <line x1="105" y1="145" x2="310" y2="145" stroke="#E8B84B" stroke-width="1.5" stroke-dasharray="5,4" opacity=".7" marker-end="url(#arr)" filter="url(#glow)"/>
+          <!-- SQL  right     670,145 -->
+          <line x1="630" y1="145" x2="430" y2="145" stroke="#E8B84B" stroke-width="1.5" stroke-dasharray="5,4" opacity=".7" marker-end="url(#arr)" filter="url(#glow)"/>
+          <!-- COBIT bottom-left  140,228 -->
+          <line x1="178" y1="210" x2="325" y2="162" stroke="#C9953A" stroke-width="1.5" stroke-dasharray="5,4" opacity=".6" marker-end="url(#arr)" filter="url(#glow)"/>
+          <!-- ITIL  bottom-right 595,228 -->
+          <line x1="557" y1="210" x2="415" y2="162" stroke="#C9953A" stroke-width="1.5" stroke-dasharray="5,4" opacity=".6" marker-end="url(#arr)" filter="url(#glow)"/>
+          <!-- UML   bottom-mid-l 270,248 -->
+          <line x1="287" y1="235" x2="340" y2="200" stroke="#D4882A" stroke-width="1.2" stroke-dasharray="4,4" opacity=".55" marker-end="url(#arr)"/>
+          <!-- DataMining bottom-mid-r 470,248 -->
+          <line x1="452" y1="235" x2="400" y2="200" stroke="#D4882A" stroke-width="1.2" stroke-dasharray="4,4" opacity=".55" marker-end="url(#arr)"/>
+        </svg>
+
+        <!-- CENTER NODE -->
+        <div class="dw-center">
+          <div class="dw-emoji">🏛️</div>
+          <div class="dw-label">DATA<br>WAREHOUSE</div>
+        </div>
+
+        <!-- 8 satellite nodes: top-left, top-right, left, right, bot-left, bot-right, bot-mid-l, bot-mid-r -->
+        <!-- ERP: top-left ~19%, 21% -->
+        <div class="tech-node" style="left:19%;top:21%;">
+          <div class="tn-icon">🏭</div>
+          <div class="tn-name">ERP</div>
+          <div class="tn-desc">Recursos empresariales</div>
+        </div>
+        <!-- CRM: top-right ~81%, 21% -->
+        <div class="tech-node" style="left:81%;top:21%;">
+          <div class="tn-icon">🤝</div>
+          <div class="tn-name">CRM</div>
+          <div class="tn-desc">Relación con clientes</div>
+        </div>
+        <!-- BPM: left ~8.5%, 50% -->
+        <div class="tech-node" style="left:8.5%;top:50%;">
+          <div class="tn-icon">🔄</div>
+          <div class="tn-name">BPM</div>
+          <div class="tn-desc">Gestión de procesos</div>
+        </div>
+        <!-- SQL: right ~91.5%, 50% -->
+        <div class="tech-node" style="left:91.5%;top:50%;">
+          <div class="tn-icon">💾</div>
+          <div class="tn-name">SQL</div>
+          <div class="tn-desc">Lenguaje de consulta</div>
+        </div>
+        <!-- COBIT: bot-left ~19%, 79% -->
+        <div class="tech-node" style="left:19%;top:79%;">
+          <div class="tn-icon">🛡️</div>
+          <div class="tn-name">COBIT</div>
+          <div class="tn-desc">Gobierno de TI</div>
+        </div>
+        <!-- ITIL: bot-right ~81%, 79% -->
+        <div class="tech-node" style="left:81%;top:79%;">
+          <div class="tn-icon">📋</div>
+          <div class="tn-name">ITIL</div>
+          <div class="tn-desc">Servicios de TI</div>
+        </div>
+        <!-- UML: bot-mid-left ~37%, 92% -->
+        <div class="tech-node" style="left:37%;top:90%;">
+          <div class="tn-icon">📐</div>
+          <div class="tn-name">UML</div>
+          <div class="tn-desc">Modelado de sistemas</div>
+        </div>
+        <!-- Data Mining: bot-mid-right ~63%, 92% -->
+        <div class="tech-node" style="left:63%;top:90%;">
+          <div class="tn-icon">⛏️</div>
+          <div class="tn-name">Data Mining</div>
+          <div class="tn-desc">Extracción de patrones</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COMPONENTS + AREAS -->
+    <div class="two-col">
+      <!-- COMPONENTS -->
+      <div class="comp-box">
+        <div class="section-label" style="margin-bottom:10px;">05 · Componentes Clave</div>
+        <div class="comp-item">
+          <div class="comp-dot" style="background:#F0E2C4;">🗂️</div>
+          <div>
+            <h5>Staging Area</h5>
+            <p>Zona temporal de preparación pre-carga de datos</p>
+          </div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-dot" style="background:#EDD5A8;">⚙️</div>
+          <div>
+            <h5>Motor ETL</h5>
+            <p>Extracción, transformación y carga automatizada</p>
+          </div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-dot" style="background:#D4A84B;">🧩</div>
+          <div>
+            <h5>Repositorio Central</h5>
+            <p>Almacén columnar optimizado para OLAP</p>
+          </div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-dot" style="background:#C09030;">🔷</div>
+          <div>
+            <h5>Data Marts</h5>
+            <p>Subconjuntos especializados por área o departamento</p>
+          </div>
+        </div>
+        <div class="comp-item">
+          <div class="comp-dot" style="background:#8B6020;">📊</div>
+          <div>
+            <h5>Capa de Presentación</h5>
+            <p>BI, dashboards, cubos OLAP y reportes ejecutivos</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AREAS -->
+      <div class="areas-box">
+        <div class="section-label" style="margin-bottom:10px;">06 · Áreas de Aplicación</div>
+        <div class="area-chip">
+          <span>🏦</span>
+          <div>
+            <h5>Finanzas y Banca</h5>
+            <p>Análisis de riesgo, cumplimiento regulatorio y rentabilidad</p>
+          </div>
+        </div>
+        <div class="area-chip">
+          <span>🛒</span>
+          <div>
+            <h5>Retail y Comercio</h5>
+            <p>Gestión de inventario, ventas y comportamiento del cliente</p>
+          </div>
+        </div>
+        <div class="area-chip">
+          <span>🏥</span>
+          <div>
+            <h5>Salud y Medicina</h5>
+            <p>Historial clínico, epidemiología y calidad asistencial</p>
+          </div>
+        </div>
+        <div class="area-chip">
+          <span>🏭</span>
+          <div>
+            <h5>Manufactura</h5>
+            <p>Control de calidad, cadena de suministro y KPIs operativos</p>
+          </div>
+        </div>
+        <div class="area-chip">
+          <span>📡</span>
+          <div>
+            <h5>Telecomunicaciones</h5>
+            <p>Análisis de uso, churn de clientes y rendimiento de red</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAMPLES -->
+    <div class="examples-section">
+      <div class="section-label">07 · Ejemplos Prácticos de Uso</div>
+      <div class="examples-grid">
+        <div class="ex-card retail">
+          <div class="ex-header">
+            <div class="ex-icon">🛍️</div>
+            <h4>Walmart / Retail</h4>
+          </div>
+          <div class="ex-body">
+            <p>Consolida ventas de miles de tiendas para optimizar inventarios, prever demanda estacional y personalizar promociones por región.</p>
+            <span class="ex-tag">Demand Forecasting</span>
+          </div>
+        </div>
+        <div class="ex-card bank">
+          <div class="ex-header">
+            <div class="ex-icon">🏦</div>
+            <h4>Banca · Riesgo</h4>
+          </div>
+          <div class="ex-body">
+            <p>Integra datos transaccionales históricos para modelos de scoring crediticio, detección de fraude en tiempo real y reportes regulatorios.</p>
+            <span class="ex-tag">Fraud Detection</span>
+          </div>
+        </div>
+        <div class="ex-card health">
+          <div class="ex-header">
+            <div class="ex-icon">🏥</div>
+            <h4>Salud · Clínicas</h4>
+          </div>
+          <div class="ex-body">
+            <p>Centraliza historiales clínicos de múltiples sistemas HIS para análisis epidemiológico, gestión de camas y mejora de protocolos.</p>
+            <span class="ex-tag">Clinical Analytics</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end body -->
+
+  <!-- ═══ FOOTER ═══ -->
+  <div class="footer">
+    <div class="footer-left">UNIVERSIDAD CATÓLICA DEL NORTE</div>
+    <div class="footer-center">
+      <div class="f-pill">Sistemas de Información</div>
+      <div class="f-pill">Ingeniería Comercial</div>
+    </div>
+    <div class="footer-right">GRUPO 15 · 2025</div>
+  </div>
+
+</div><!-- end page -->
+</body>
+</html>
