@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Warehouse – Grupo 15</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #e8e8e8;
+    display: flex;
+    justify-content: center;
+    padding: 30px 10px;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* A4 794 x 1123 */
+  .page {
+    width: 794px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  /* ────── HEADER ────── */
+  .header {
+    background: #1E3A5F;
+    padding: 30px 36px 26px;
+    position: relative;
+  }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .header h1 {
+    font-size: 38px;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+  .header h1 span {
+    color: #F5C842;
+  }
+  .header .subtitle {
+    font-size: 12px;
+    font-weight: 600;
+    color: #a8c4e0;
+    margin-top: 6px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .badge-grupo {
+    background: #F5C842;
+    color: #1E3A5F;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 6px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+  .header-wave {
+    position: absolute;
+    bottom: -1px; left: 0;
+    width: 100%; height: 30px;
+    background: #ffffff;
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+
+  /* ────── BODY ────── */
+  .body {
+    padding: 10px 32px 0;
+  }
+
+  /* ── DEFINICION ── */
+  .def-section {
+    background: #F0F6FF;
+    border-left: 6px solid #1E3A5F;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .def-icon {
+    font-size: 36px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .def-title {
+    font-size: 11px;
+    font-weight: 800;
+    color: #1E3A5F;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+  }
+  .def-text {
+    font-size: 12px;
+    color: #334155;
+    line-height: 1.7;
+    font-family: 'Nunito', sans-serif;
+  }
+  .def-text b { color: #1E3A5F; }
+
+  /* ── SECTION TITLE ── */
+  .sec-title {
+    font-size: 13px;
+    font-weight: 800;
+    color: #1E3A5F;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sec-title::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, #1E3A5F22, transparent);
+    border-radius: 2px;
+  }
+
+  /* ── PROPOSITO: 4 CARDS ── */
+  .prop-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .prop-card {
+    border-radius: 14px;
+    padding: 14px 10px 12px;
+    text-align: center;
+  }
+  .prop-card:nth-child(1) { background: #DBEAFE; }
+  .prop-card:nth-child(2) { background: #D1FAE5; }
+  .prop-card:nth-child(3) { background: #FEF3C7; }
+  .prop-card:nth-child(4) { background: #FCE7F3; }
+  .prop-card .pc-icon { font-size: 26px; display: block; margin-bottom: 6px; }
+  .prop-card h4 {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 3px;
+  }
+  .prop-card p {
+    font-size: 9px;
+    color: #475569;
+    line-height: 1.5;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  /* ── ETL FLOW ── */
+  .etl-wrap {
+    margin-bottom: 20px;
+  }
+  .etl-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .etl-box {
+    flex: 1;
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .etl-box .eb-icon { font-size: 18px; display: block; margin-bottom: 3px; }
+  .etl-box .eb-label {
+    font-size: 9px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .etl-box .eb-sub {
+    font-size: 8px;
+    font-family: 'Nunito', sans-serif;
+    margin-top: 2px;
+    line-height: 1.3;
+  }
+  .etl-box.b1 { background: #EFF6FF; }
+  .etl-box.b1 .eb-label { color: #1d4ed8; }
+  .etl-box.b1 .eb-sub { color: #3b82f6; }
+  .etl-box.b2 { background: #F0FDF4; }
+  .etl-box.b2 .eb-label { color: #15803d; }
+  .etl-box.b2 .eb-sub { color: #22c55e; }
+  .etl-box.b3 { background: #FFF7ED; }
+  .etl-box.b3 .eb-label { color: #c2410c; }
+  .etl-box.b3 .eb-sub { color: #f97316; }
+  .etl-box.b4 { background: #FDF4FF; }
+  .etl-box.b4 .eb-label { color: #7e22ce; }
+  .etl-box.b4 .eb-sub { color: #a855f7; }
+  .etl-box.b5 { background: #1E3A5F; }
+  .etl-box.b5 .eb-label { color: #F5C842; }
+  .etl-box.b5 .eb-sub { color: #a8c4e0; }
+  .etl-box.b6 { background: #F5C842; }
+  .etl-box.b6 .eb-label { color: #1E3A5F; }
+  .etl-box.b6 .eb-sub { color: #1E3A5F; }
+  .etl-arrow {
+    font-size: 14px;
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+
+  /* ── INTEGRATION MAP ── */
+  .integ-section { margin-bottom: 20px; }
+
+  .integ-box {
+    background: #1E3A5F;
+    border-radius: 16px;
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* left column of chips */
+  .integ-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* center hub */
+  .integ-center {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 220px;
+  }
+
+  .dw-node {
+    width: 108px; height: 108px;
+    background: #F5C842;
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    z-index: 10;
+    box-shadow: 0 0 0 10px rgba(245,200,66,.15), 0 0 0 22px rgba(245,200,66,.07);
+    flex-shrink: 0;
+  }
+  .dw-node .dn-icon { font-size: 28px; line-height:1; }
+  .dw-node .dn-label {
+    font-size: 10px; font-weight: 800;
+    color: #1E3A5F;
+    line-height: 1.2;
+    margin-top: 4px;
+  }
+
+  /* horizontal connector lines */
+  .integ-center::before,
+  .integ-center::after {
+    content: '';
+    position: absolute;
+    top: 50%; height: 1px;
+    border-top: 2px dashed rgba(245,200,66,.35);
+  }
+  .integ-center::before { left: 0; right: 50%; }
+  .integ-center::after  { left: 50%; right: 0; }
+
+  /* vertical lines inside center connecting to top/bottom rows */
+  .v-lines {
+    position: absolute; inset: 0;
+    pointer-events: none;
+  }
+
+  .tech-chip {
+    background: rgba(255,255,255,.08);
+    border: 1.5px solid rgba(245,200,66,.3);
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 160px;
+  }
+  .tech-chip .tc-icon { font-size: 20px; flex-shrink: 0; }
+  .tech-chip .tc-name {
+    font-size: 10px; font-weight: 800;
+    color: #F5C842;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .tech-chip .tc-desc {
+    font-size: 8px; color: #a8c4e0;
+    line-height: 1.3;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  /* arrow connectors */
+  .chip-arrow {
+    font-size: 16px;
+    color: rgba(245,200,66,.5);
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .integ-col.left  .chip-arrow { margin-left: auto; }
+  .integ-col.right .chip-arrow { margin-right: auto; }
+
+  .chip-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .integ-col.right .chip-row { flex-direction: row-reverse; }
+
+  /* ── TWO COL: COMPONENTS + AREAS ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .sub-box {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1.5px solid #e2e8f0;
+  }
+  .sub-box-head {
+    padding: 10px 14px;
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .sub-box-head.blue  { background: #1E3A5F; color: #F5C842; }
+  .sub-box-head.gold  { background: #F5C842; color: #1E3A5F; }
+  .sub-box-body { padding: 10px 14px; background: #fff; }
+
+  .comp-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px dashed #e2e8f0;
+  }
+  .comp-row:last-child { border-bottom: none; }
+  .comp-dot {
+    width: 28px; height: 28px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .comp-row h5 { font-size: 10px; font-weight: 700; color: #1e293b; }
+  .comp-row p  { font-size: 8.5px; color: #64748b; font-family: 'Nunito', sans-serif; }
+
+  .area-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px dashed #e2e8f0;
+  }
+  .area-row:last-child { border-bottom: none; }
+  .area-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .area-row h5 { font-size: 10px; font-weight: 700; color: #1e293b; }
+  .area-row p  { font-size: 8.5px; color: #64748b; font-family: 'Nunito', sans-serif; }
+
+  /* ── EXAMPLES ── */
+  .examples-section { margin-bottom: 8px; }
+  .ex-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .ex-card { border-radius: 14px; overflow: hidden; border: 1.5px solid #e2e8f0; }
+  .ex-top {
+    padding: 10px 12px 8px;
+    display: flex; gap: 8px; align-items: center;
+  }
+  .ex-top.c1 { background: #DBEAFE; }
+  .ex-top.c2 { background: #D1FAE5; }
+  .ex-top.c3 { background: #FEF3C7; }
+  .ex-top .et-icon { font-size: 22px; }
+  .ex-top h4 { font-size: 10px; font-weight: 800; color: #1e293b; }
+  .ex-top span { font-size: 8px; color: #64748b; font-family:'Nunito',sans-serif; }
+  .ex-body { padding: 8px 12px 10px; background: #fff; }
+  .ex-body p { font-size: 9px; color: #475569; line-height: 1.55; font-family:'Nunito',sans-serif; }
+  .ex-tag {
+    display: inline-block;
+    background: #1E3A5F;
+    color: #F5C842;
+    font-size: 7.5px; font-weight: 700;
+    padding: 2px 8px; border-radius: 6px;
+    margin-top: 5px; letter-spacing: .5px;
+    text-transform: uppercase;
+  }
+
+  /* ────── FOOTER ────── */
+  .footer {
+    background: #1E3A5F;
+    padding: 12px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 14px;
+  }
+  .footer p { font-size: 9px; color: #a8c4e0; letter-spacing: 1px; }
+  .footer .fg { color: #F5C842; font-weight: 700; font-size: 10px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <h1>DATA <span>WAREHOUSE</span></h1>
+        <div class="subtitle">Tecnologías de Información · UCN 2025</div>
+      </div>
+      <div class="badge-grupo">GRUPO 15</div>
+    </div>
+    <div class="header-wave"></div>
+  </div>
+
+  <div class="body">
+
+    <!-- DEFINICION -->
+    <div class="def-section">
+      <div class="def-icon">🏛️</div>
+      <div>
+        <div class="def-title">¿Qué es un Data Warehouse?</div>
+        <div class="def-text">
+          Un <b>Data Warehouse (DW)</b> es un sistema de almacenamiento central que reúne datos de múltiples fuentes de una organización. A diferencia de las bases de datos normales, está diseñado especialmente para el <b>análisis y la toma de decisiones</b>. Almacena grandes volúmenes de datos históricos organizados para consultas rápidas y reportes empresariales (OLAP), integrando información de sistemas como ERP, CRM, y otras fuentes operacionales.
+        </div>
+      </div>
+    </div>
+
+    <!-- PROPÓSITO -->
+    <div class="sec-title">🎯 Propósito Funcional</div>
+    <div class="prop-grid">
+      <div class="prop-card">
+        <span class="pc-icon">🔗</span>
+        <h4>Integración</h4>
+        <p>Une datos de múltiples sistemas en una sola fuente confiable</p>
+      </div>
+      <div class="prop-card">
+        <span class="pc-icon">📅</span>
+        <h4>Historial</h4>
+        <p>Guarda datos históricos para analizar tendencias en el tiempo</p>
+      </div>
+      <div class="prop-card">
+        <span class="pc-icon">📊</span>
+        <h4>Análisis</h4>
+        <p>Permite consultas complejas y reportes de alto rendimiento</p>
+      </div>
+      <div class="prop-card">
+        <span class="pc-icon">💡</span>
+        <h4>Decisiones</h4>
+        <p>Apoya la estrategia empresarial con datos precisos</p>
+      </div>
+    </div>
+
+    <!-- ETL -->
+    <div class="etl-wrap">
+      <div class="sec-title">⚙️ Proceso ETL — ¿Cómo funciona?</div>
+      <div class="etl-row">
+        <div class="etl-box b1">
+          <span class="eb-icon">🗄️</span>
+          <div class="eb-label">Fuentes</div>
+          <div class="eb-sub">ERP, CRM, archivos, BD externas</div>
+        </div>
+        <div class="etl-arrow">▶</div>
+        <div class="etl-box b2">
+          <span class="eb-icon">📤</span>
+          <div class="eb-label">Extracción</div>
+          <div class="eb-sub">Se capturan los datos brutos</div>
+        </div>
+        <div class="etl-arrow">▶</div>
+        <div class="etl-box b3">
+          <span class="eb-icon">⚙️</span>
+          <div class="eb-label">Transformación</div>
+          <div class="eb-sub">Limpieza y normalización</div>
+        </div>
+        <div class="etl-arrow">▶</div>
+        <div class="etl-box b4">
+          <span class="eb-icon">📥</span>
+          <div class="eb-label">Carga</div>
+          <div class="eb-sub">Se inserta en el almacén</div>
+        </div>
+        <div class="etl-arrow">▶</div>
+        <div class="etl-box b5">
+          <span class="eb-icon">🏛️</span>
+          <div class="eb-label">Data Warehouse</div>
+          <div class="eb-sub">Repositorio central</div>
+        </div>
+        <div class="etl-arrow">▶</div>
+        <div class="etl-box b6">
+          <span class="eb-icon">📈</span>
+          <div class="eb-label">BI & Reportes</div>
+          <div class="eb-sub">Análisis y dashboards</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTEGRATION -->
+    <div class="integ-section">
+      <div class="sec-title">🔌 Integración con otras Tecnologías de TI</div>
+      <div class="integ-box">
+
+        <!-- LEFT COLUMN -->
+        <div class="integ-col left">
+          <div class="chip-row">
+            <div class="tech-chip">
+              <span class="tc-icon">🏭</span>
+              <div><div class="tc-name">ERP</div><div class="tc-desc">Recursos empresariales</div></div>
+            </div>
+            <span class="chip-arrow">›</span>
+          </div>
+          <div class="chip-row">
+            <div class="tech-chip">
+              <span class="tc-icon">🤝</span>
+              <div><div class="tc-name">CRM</div><div class="tc-desc">Relación con clientes</div></div>
+            </div>
+            <span class="chip-arrow">›</span>
+          </div>
+          <div class="chip-row">
+            <div class="tech-chip">
+              <span class="tc-icon">⚙️</span>
+              <div><div class="tc-name">BPM</div><div class="tc-desc">Gestión de procesos</div></div>
+            </div>
+            <span class="chip-arrow">›</span>
+          </div>
+          <div class="chip-row">
+            <div class="tech-chip">
+              <span class="tc-icon">🛡️</span>
+              <div><div class="tc-name">COBIT</div><div class="tc-desc">Gobierno de TI</div></div>
+            </div>
+            <span class="chip-arrow">›</span>
+          </div>
+        </div>
+
+        <!-- CENTER NODE -->
+        <div class="integ-center">
+          <div class="dw-node">
+            <span class="dn-icon">🏛️</span>
+            <div class="dn-label">DATA<br>WAREHOUSE</div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="integ-col right">
+          <div class="chip-row">
+            <span class="chip-arrow">‹</span>
+            <div class="tech-chip">
+              <span class="tc-icon">📋</span>
+              <div><div class="tc-name">ITIL</div><div class="tc-desc">Servicios de TI</div></div>
+            </div>
+          </div>
+          <div class="chip-row">
+            <span class="chip-arrow">‹</span>
+            <div class="tech-chip">
+              <span class="tc-icon">💾</span>
+              <div><div class="tc-name">SQL</div><div class="tc-desc">Lenguaje de consulta</div></div>
+            </div>
+          </div>
+          <div class="chip-row">
+            <span class="chip-arrow">‹</span>
+            <div class="tech-chip">
+              <span class="tc-icon">📐</span>
+              <div><div class="tc-name">UML</div><div class="tc-desc">Modelado de sistemas</div></div>
+            </div>
+          </div>
+          <div class="chip-row">
+            <span class="chip-arrow">‹</span>
+            <div class="tech-chip">
+              <span class="tc-icon">⛏️</span>
+              <div><div class="tc-name">Data Mining</div><div class="tc-desc">Extracción de patrones</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- COMPONENTS + AREAS -->
+    <div class="two-col">
+      <div class="sub-box">
+        <div class="sub-box-head blue">🧩 Componentes Clave</div>
+        <div class="sub-box-body">
+          <div class="comp-row">
+            <div class="comp-dot" style="background:#DBEAFE;">📦</div>
+            <div><h5>Staging Area</h5><p>Zona temporal antes de cargar los datos</p></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-dot" style="background:#D1FAE5;">⚙️</div>
+            <div><h5>Motor ETL</h5><p>Extrae, transforma y carga automáticamente</p></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-dot" style="background:#FEF3C7;">🗃️</div>
+            <div><h5>Repositorio Central</h5><p>Almacén optimizado para consultas OLAP</p></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-dot" style="background:#FCE7F3;">🔷</div>
+            <div><h5>Data Marts</h5><p>Subconjuntos por área o departamento</p></div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-dot" style="background:#EDE9FE;">📊</div>
+            <div><h5>Capa BI</h5><p>Dashboards, reportes y cubos OLAP</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-box">
+        <div class="sub-box-head gold">🌐 Áreas de Aplicación</div>
+        <div class="sub-box-body">
+          <div class="area-row">
+            <div class="area-dot" style="background:#3b82f6;"></div>
+            <div><h5>🏦 Finanzas y Banca</h5><p>Análisis de riesgo y reportes regulatorios</p></div>
+          </div>
+          <div class="area-row">
+            <div class="area-dot" style="background:#22c55e;"></div>
+            <div><h5>🛒 Retail y Comercio</h5><p>Inventario, ventas y comportamiento del cliente</p></div>
+          </div>
+          <div class="area-row">
+            <div class="area-dot" style="background:#f97316;"></div>
+            <div><h5>🏥 Salud</h5><p>Historial clínico y análisis epidemiológico</p></div>
+          </div>
+          <div class="area-row">
+            <div class="area-dot" style="background:#a855f7;"></div>
+            <div><h5>🏭 Manufactura</h5><p>Control de calidad y cadena de suministro</p></div>
+          </div>
+          <div class="area-row">
+            <div class="area-dot" style="background:#ef4444;"></div>
+            <div><h5>📡 Telecomunicaciones</h5><p>Análisis de uso y gestión de red</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXAMPLES -->
+    <div class="examples-section">
+      <div class="sec-title">💼 Ejemplos Prácticos</div>
+      <div class="ex-grid">
+        <div class="ex-card">
+          <div class="ex-top c1">
+            <div class="et-icon">🛍️</div>
+            <div><h4>Retail — Walmart</h4><span>Gestión de inventario global</span></div>
+          </div>
+          <div class="ex-body">
+            <p>Consolida ventas de miles de tiendas para optimizar inventarios, predecir demanda y personalizar promociones por región.</p>
+            <span class="ex-tag">Demand Forecasting</span>
+          </div>
+        </div>
+        <div class="ex-card">
+          <div class="ex-top c2">
+            <div class="et-icon">🏦</div>
+            <div><h4>Banca — Riesgo</h4><span>Scoring y detección de fraude</span></div>
+          </div>
+          <div class="ex-body">
+            <p>Integra datos transaccionales históricos para modelos de scoring crediticio y detección de fraude en tiempo real.</p>
+            <span class="ex-tag">Fraud Detection</span>
+          </div>
+        </div>
+        <div class="ex-card">
+          <div class="ex-top c3">
+            <div class="et-icon">🏥</div>
+            <div><h4>Salud — Clínicas</h4><span>Análisis epidemiológico</span></div>
+          </div>
+          <div class="ex-body">
+            <p>Centraliza historiales clínicos de múltiples sistemas para mejorar la gestión hospitalaria y los protocolos médicos.</p>
+            <span class="ex-tag">Clinical Analytics</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>Universidad Católica del Norte · Sistemas de Información</p>
+    <p class="fg">GRUPO 15 — 2025</p>
+    <p>Ingeniería Comercial</p>
+  </div>
+
+</div>
+</body>
+</html>
