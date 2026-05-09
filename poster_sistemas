@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Data Warehouse — Grupo 15</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;700;800&display=swap');
+
+  :root {
+    --cafe-900: #1C0F00;
+    --cafe-800: #2E1A00;
+    --cafe-700: #4A2C00;
+    --cafe-600: #6B3F00;
+    --cafe-500: #8B5215;
+    --canel-500: #A0622A;
+    --canel-400: #B87333;
+    --canel-300: #C8894E;
+    --canel-200: #D9A87A;
+    --canel-100: #EAC9A6;
+    --canel-50:  #F5E8D8;
+    --beige-200: #E8D9C0;
+    --beige-100: #F0E6D0;
+    --beige-50:  #FAF5EC;
+    --cream:     #FFFDF7;
+    --gold-700: #7A5A00;
+    --gold-600: #9A7200;
+    --gold-500: #C49A00;
+    --gold-400: #D4AE1A;
+    --gold-300: #E8C83A;
+    --gold-200: #F0DA7A;
+    --gold-100: #F8EDBA;
+    --gold-50:  #FDFAED;
+    --terra-700: #5C2E00;
+    --terra-500: #9B5020;
+    --terra-300: #C87A50;
+    --terra-100: #EDD5C0;
+    --terra-50:  #FBF0E8;
+    --olive-700: #3A3010;
+    --olive-500: #6B5E28;
+    --olive-300: #A09050;
+    --olive-100: #DDD5A8;
+    --olive-50:  #F5F2E0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: #e8dcc8;
+    color: var(--cafe-800);
+    width: 794px;
+    margin: 0 auto;
+  }
+
+  .page { width: 794px; background: var(--cream); }
+
+  .hero {
+    background: var(--cafe-800);
+    padding: 28px 40px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 8px; height: 100%;
+    background: var(--gold-400);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 8px; height: 100%;
+    background: var(--gold-400);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--cafe-700) 1px, transparent 1px),
+      linear-gradient(90deg, var(--cafe-700) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.4;
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-size: 10px; font-weight: 500; letter-spacing: 4px;
+    color: var(--gold-300); margin-bottom: 6px; text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 52px; font-weight: 800; line-height: 1;
+    color: var(--beige-50); letter-spacing: -1px;
+  }
+  .hero-title span { color: var(--gold-300); }
+  .hero-sub { font-size: 13px; color: var(--canel-200); margin-top: 8px; opacity: 0.9; }
+  .hero-badge {
+    position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+    background: var(--gold-500); border-radius: 50px; padding: 8px 20px;
+    font-size: 12px; font-weight: 700; color: var(--cafe-900); letter-spacing: 1px; z-index: 1;
+  }
+
+  .section-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--canel-500);
+    text-align: center; padding: 14px 0 6px;
+  }
+  .section-label.gold  { color: var(--gold-600); }
+  .section-label.olive { color: var(--olive-500); }
+  .section-label.terra { color: var(--terra-500); }
+
+  .definition {
+    margin: 0 28px;
+    padding: 18px 20px 16px 24px;
+    background: var(--beige-50);
+    border-left: 5px solid var(--gold-400);
+    border-radius: 10px;
+    display: flex; gap: 16px; align-items: flex-start;
+    border: 1px solid var(--beige-200);
+    border-left: 5px solid var(--gold-400);
+  }
+  .def-icon { font-size: 32px; flex-shrink: 0; margin-top: 2px; }
+  .def-title { font-size: 13px; font-weight: 700; color: var(--cafe-700); margin-bottom: 6px; }
+  .def-text  { font-size: 11px; line-height: 1.65; color: var(--cafe-600); }
+  .def-text strong { color: var(--cafe-800); }
+  .def-pills { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .pill {
+    background: var(--gold-500); color: var(--cafe-900);
+    font-size: 9px; font-weight: 700; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.5px;
+  }
+
+  .arch-container {
+    margin: 0 28px;
+    border: 1.5px solid var(--canel-300); border-radius: 14px; overflow: hidden;
+  }
+  .arch-header {
+    background: var(--cafe-700); padding: 10px; text-align: center;
+    font-size: 11px; font-weight: 700; color: var(--gold-200); letter-spacing: 2px; text-transform: uppercase;
+  }
+  .arch-body { padding: 16px; background: var(--beige-50); }
+  .arch-layer { margin-bottom: 10px; }
+  .arch-layer-label {
+    font-size: 8px; font-weight: 700; letter-spacing: 2px;
+    color: var(--canel-500); text-transform: uppercase; margin-bottom: 6px; padding-left: 4px;
+  }
+  .arch-row { display: flex; gap: 6px; }
+  .arch-box { flex: 1; background: var(--cafe-700); border-radius: 8px; padding: 8px 6px; text-align: center; }
+  .arch-box .box-title { font-size: 10px; font-weight: 600; color: var(--gold-200); margin-bottom: 2px; }
+  .arch-box .box-sub   { font-size: 8.5px; color: var(--canel-200); }
+  .arch-arrow { text-align: center; font-size: 18px; color: var(--gold-500); margin: 4px 0; }
+
+  .etl-row { display: flex; background: var(--cafe-600); border-radius: 10px; overflow: hidden; }
+  .etl-step { flex: 1; padding: 10px 8px; text-align: center; position: relative; }
+  .etl-step:not(:last-child)::after {
+    content: '▶'; position: absolute; right: -8px; top: 50%; transform: translateY(-50%);
+    font-size: 12px; color: var(--gold-300); z-index: 1;
+  }
+  .etl-step .etl-letter { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--gold-300); line-height: 1; }
+  .etl-step .etl-name   { font-size: 10px; font-weight: 700; color: var(--beige-100); }
+  .etl-step .etl-desc   { font-size: 8.5px; color: var(--canel-200); margin-top: 2px; }
+
+  .repo-box {
+    background: var(--canel-400); border-radius: 10px; padding: 12px;
+    text-align: center; border: 2px solid var(--gold-300);
+  }
+  .repo-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; color: var(--cafe-900); letter-spacing: 1px; }
+  .repo-sub   { font-size: 9px; color: var(--cafe-800); margin-top: 2px; opacity: 0.85; }
+  .repo-tags  { display: flex; gap: 5px; justify-content: center; margin-top: 8px; flex-wrap: wrap; }
+  .repo-tag   { background: rgba(28,15,0,0.18); color: var(--cafe-900); font-size: 8.5px; font-weight: 700; padding: 3px 8px; border-radius: 4px; }
+
+  .output-row { display: flex; gap: 6px; }
+  .output-box {
+    flex: 1; background: var(--cafe-800); border-radius: 8px; padding: 8px; text-align: center; border-top: 3px solid var(--gold-400);
+  }
+  .output-box .out-icon  { font-size: 16px; }
+  .output-box .out-title { font-size: 10px; font-weight: 600; color: var(--gold-200); margin: 3px 0 2px; }
+  .output-box .out-sub   { font-size: 8.5px; color: var(--canel-200); }
+
+  .integration { margin: 0 28px; }
+  .int-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto auto; gap: 8px;
+  }
+  .int-center {
+    grid-column: 2; grid-row: 2;
+    background: var(--canel-400); border-radius: 12px; border: 2.5px solid var(--gold-300);
+    padding: 12px 8px; text-align: center; display: flex;
+    flex-direction: column; justify-content: center; align-items: center; min-height: 80px;
+  }
+  .int-center-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800; color: var(--cafe-900); line-height: 1.1; }
+  .int-center-sub   { font-size: 8px; color: var(--cafe-800); margin-top: 4px; opacity: 0.75; }
+
+  .int-node {
+    border-radius: 10px; padding: 10px 10px 8px;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; min-height: 72px; justify-content: center;
+  }
+  .int-node .node-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+  .int-node .node-desc { font-size: 8.5px; line-height: 1.4; }
+
+  .node-gold  { background: var(--gold-50);  border: 1px solid var(--gold-300); }
+  .node-gold  .node-name { color: var(--gold-700); }
+  .node-gold  .node-desc { color: var(--gold-600); }
+
+  .node-cafe  { background: var(--canel-50); border: 1px solid var(--canel-300); }
+  .node-cafe  .node-name { color: var(--cafe-700); }
+  .node-cafe  .node-desc { color: var(--canel-500); }
+
+  .node-terra { background: var(--terra-50); border: 1px solid var(--terra-300); }
+  .node-terra .node-name { color: var(--terra-700); }
+  .node-terra .node-desc { color: var(--terra-500); }
+
+  .node-olive { background: var(--olive-50); border: 1px solid var(--olive-300); }
+  .node-olive .node-name { color: var(--olive-700); }
+  .node-olive .node-desc { color: var(--olive-500); }
+
+  .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 28px; }
+  .app-card { border-radius: 10px; padding: 14px 14px 12px 18px; position: relative; overflow: hidden; }
+  .app-card::before { content: ''; position: absolute; left: 0; top: 0; width: 5px; height: 100%; }
+  .app-card .app-icon  { font-size: 20px; margin-bottom: 5px; }
+  .app-card .app-title { font-size: 11px; font-weight: 700; margin-bottom: 5px; }
+  .app-card .app-text  { font-size: 10px; line-height: 1.5; }
+
+  .app-gold  { background: var(--gold-50);  border: 1px solid var(--gold-200); }
+  .app-gold::before   { background: var(--gold-500); }
+  .app-gold  .app-title { color: var(--gold-700); }
+  .app-gold  .app-text  { color: var(--gold-600); }
+
+  .app-cafe  { background: var(--canel-50); border: 1px solid var(--canel-200); }
+  .app-cafe::before   { background: var(--canel-400); }
+  .app-cafe  .app-title { color: var(--cafe-700); }
+  .app-cafe  .app-text  { color: var(--canel-500); }
+
+  .app-terra { background: var(--terra-50); border: 1px solid var(--terra-100); }
+  .app-terra::before  { background: var(--terra-500); }
+  .app-terra .app-title { color: var(--terra-700); }
+  .app-terra .app-text  { color: var(--terra-500); }
+
+  .app-olive { background: var(--olive-50); border: 1px solid var(--olive-100); }
+  .app-olive::before  { background: var(--olive-500); }
+  .app-olive .app-title { color: var(--olive-700); }
+  .app-olive .app-text  { color: var(--olive-500); }
+
+  .examples { margin: 0 28px; }
+  .example-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 14px; border-radius: 10px; margin-bottom: 7px;
+  }
+  .ex-num {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; flex-shrink: 0;
+  }
+  .ex-title { font-size: 11px; font-weight: 700; margin-bottom: 3px; }
+  .ex-text  { font-size: 10px; line-height: 1.5; }
+
+  .ex-1 { background: var(--gold-50); border: 1px solid var(--gold-200); }
+  .ex-1 .ex-num   { background: var(--gold-500); color: var(--cafe-900); }
+  .ex-1 .ex-title { color: var(--gold-700); }
+  .ex-1 .ex-text  { color: var(--gold-600); }
+
+  .ex-2 { background: var(--canel-50); border: 1px solid var(--canel-200); }
+  .ex-2 .ex-num   { background: var(--canel-400); color: var(--cafe-900); }
+  .ex-2 .ex-title { color: var(--cafe-700); }
+  .ex-2 .ex-text  { color: var(--canel-500); }
+
+  .ex-3 { background: var(--olive-50); border: 1px solid var(--olive-100); }
+  .ex-3 .ex-num   { background: var(--olive-500); color: var(--beige-50); }
+  .ex-3 .ex-title { color: var(--olive-700); }
+  .ex-3 .ex-text  { color: var(--olive-500); }
+
+  .footer { background: var(--cafe-800); padding: 18px 40px; margin-top: 16px; }
+  .footer-props { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 12px; }
+  .footer-pill {
+    background: var(--cafe-700); color: var(--gold-200);
+    font-size: 9px; font-weight: 600; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.5px;
+  }
+  .footer-credit { text-align: center; font-size: 10px; color: var(--canel-200); }
+  .footer-credit strong { color: var(--gold-300); }
+
+  .mt18 { margin-top: 18px; }
+
+  @media print {
+    body { background: white; }
+    .page { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Tecnologías de Información · UCN</div>
+      <div class="hero-title">DATA <span>WARE</span><br>HOUSE</div>
+      <div class="hero-sub">Repositorio centralizado de datos para análisis e inteligencia de negocios</div>
+    </div>
+    <div class="hero-badge">GRUPO 15</div>
+  </div>
+
+  <div class="section-label">Definición y Propósito</div>
+  <div class="definition">
+    <div class="def-icon">🗄️</div>
+    <div>
+      <div class="def-title">¿Qué es un Data Warehouse?</div>
+      <div class="def-text">
+        Es un <strong>repositorio centralizado, integrado y no volátil</strong> de datos históricos provenientes de múltiples fuentes operativas.
+        Fue definido por W.H. Inmon (1990) como "un único almacén completo y consistente de datos obtenidos de diversas fuentes
+        para su uso en el análisis estratégico y la toma de decisiones". No está orientado a procesar transacciones
+        diarias, sino a <strong>analizar tendencias, patrones y apoyar decisiones gerenciales</strong>.
+      </div>
+      <div class="def-pills">
+        <span class="pill">No volátil</span>
+        <span class="pill">Orientado al sujeto</span>
+        <span class="pill">Integrado</span>
+        <span class="pill">Variante en el tiempo</span>
+        <span class="pill">Soporte a decisiones (BI)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-label gold mt18">Arquitectura y Componentes</div>
+  <div class="arch-container">
+    <div class="arch-header">Arquitectura Data Warehouse</div>
+    <div class="arch-body">
+
+      <div class="arch-layer">
+        <div class="arch-layer-label">① Fuentes de datos</div>
+        <div class="arch-row">
+          <div class="arch-box"><div class="box-title">Sistemas operacionales</div><div class="box-sub">ERP, CRM, BPM</div></div>
+          <div class="arch-box"><div class="box-title">Archivos externos</div><div class="box-sub">CSV, XML, APIs</div></div>
+          <div class="arch-box"><div class="box-title">BD transaccionales</div><div class="box-sub">SQL, NoSQL, OLTP</div></div>
+          <div class="arch-box"><div class="box-title">Logs y registros</div><div class="box-sub">Auditoría, eventos</div></div>
+          <div class="arch-box"><div class="box-title">Datos web</div><div class="box-sub">Clickstream, redes</div></div>
+        </div>
+      </div>
+
+      <div class="arch-arrow">↓</div>
+
+      <div class="arch-layer">
+        <div class="arch-layer-label">② Proceso ETL</div>
+        <div class="etl-row">
+          <div class="etl-step">
+            <div class="etl-letter">E</div>
+            <div class="etl-name">Extract</div>
+            <div class="etl-desc">Extracción desde fuentes heterogéneas</div>
+          </div>
+          <div class="etl-step">
+            <div class="etl-letter">T</div>
+            <div class="etl-name">Transform</div>
+            <div class="etl-desc">Limpieza, conversión y estandarización</div>
+          </div>
+          <div class="etl-step">
+            <div class="etl-letter">L</div>
+            <div class="etl-name">Load</div>
+            <div class="etl-desc">Carga al repositorio central</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-arrow">↓</div>
+
+      <div class="arch-layer">
+        <div class="arch-layer-label">③ Repositorio central</div>
+        <div class="repo-box">
+          <div class="repo-title">REPOSITORIO DATA WAREHOUSE</div>
+          <div class="repo-sub">Almacén único, histórico, integrado y optimizado para consultas analíticas</div>
+          <div class="repo-tags">
+            <span class="repo-tag">Staging Area</span>
+            <span class="repo-tag">Data Marts</span>
+            <span class="repo-tag">Metadatos</span>
+            <span class="repo-tag">Datos históricos</span>
+            <span class="repo-tag">Esquema estrella / copo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-arrow">↓</div>
+
+      <div class="arch-layer">
+        <div class="arch-layer-label">④ Capa de análisis y acceso</div>
+        <div class="output-row">
+          <div class="output-box"><div class="out-icon">🔍</div><div class="out-title">Herramientas BI</div><div class="out-sub">Power BI, Tableau, QlikView</div></div>
+          <div class="output-box"><div class="out-icon">📊</div><div class="out-title">OLAP / Cubos</div><div class="out-sub">Análisis multidimensional</div></div>
+          <div class="output-box"><div class="out-icon">🤖</div><div class="out-title">Data Mining</div><div class="out-sub">Patrones y predicciones</div></div>
+          <div class="output-box"><div class="out-icon">📈</div><div class="out-title">Reporting</div><div class="out-sub">Dashboards e informes</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section-label olive mt18">Integración con otras Tecnologías de Información</div>
+  <div class="integration">
+    <div class="int-grid">
+      <div class="int-node node-gold"><div class="node-name">ERP</div><div class="node-desc">Finanzas, RRHH e inventario → alimentan el DWH</div></div>
+      <div class="int-node node-cafe"><div class="node-name">COBIT</div><div class="node-desc">Marco de gobierno y control de TI; rige la gestión del DWH</div></div>
+      <div class="int-node node-gold"><div class="node-name">CRM</div><div class="node-desc">Clientes, ventas y campañas → análisis de comportamiento</div></div>
+
+      <div class="int-node node-terra"><div class="node-name">BPM</div><div class="node-desc">Registra flujos de procesos que generan datos para el DWH</div></div>
+      <div class="int-center"><div class="int-center-title">DATA<br>WAREHOUSE</div><div class="int-center-sub">Núcleo analítico central</div></div>
+      <div class="int-node node-terra"><div class="node-name">ITIL</div><div class="node-desc">Buenas prácticas TI; gestiona disponibilidad del DWH</div></div>
+
+      <div class="int-node node-olive"><div class="node-name">SQL</div><div class="node-desc">Lenguaje base para consultar y cargar datos en el DWH</div></div>
+      <div class="int-node node-cafe"><div class="node-name">UML</div><div class="node-desc">Modela la arquitectura y diseño del DWH visualmente</div></div>
+      <div class="int-node node-olive"><div class="node-name">Data Mining</div><div class="node-desc">Extrae patrones y conocimiento desde los datos del DWH</div></div>
+    </div>
+  </div>
+
+  <div class="section-label terra mt18">Áreas de Aplicación</div>
+  <div class="app-grid">
+    <div class="app-card app-gold"><div class="app-icon">🏦</div><div class="app-title">Sector financiero y banca</div><div class="app-text">Análisis de riesgos, detección de fraude en tiempo real, reportería regulatoria y consolidación histórica de cuentas.</div></div>
+    <div class="app-card app-cafe"><div class="app-icon">🏥</div><div class="app-title">Salud y hospitales</div><div class="app-text">Historial clínico unificado por paciente, análisis epidemiológico, gestión de recursos y planificación hospitalaria.</div></div>
+    <div class="app-card app-terra"><div class="app-icon">🛒</div><div class="app-title">Retail y e-commerce</div><div class="app-text">Análisis de comportamiento de compra, gestión de inventario, segmentación de clientes y personalización de ofertas.</div></div>
+    <div class="app-card app-olive"><div class="app-icon">🏭</div><div class="app-title">Manufactura e industria</div><div class="app-text">Control de producción y calidad, análisis de supply chain, mantenimiento predictivo y optimización operativa.</div></div>
+  </div>
+
+  <div class="section-label gold mt18">Ejemplos Prácticos de Uso</div>
+  <div class="examples">
+    <div class="example-item ex-1">
+      <div class="ex-num">1</div>
+      <div>
+        <div class="ex-title">Amazon — Recomendaciones personalizadas en tiempo real</div>
+        <div class="ex-text">Consolida datos de millones de transacciones diarias en su DWH → el motor de recomendaciones analiza patrones de compra y navegación → genera sugerencias personalizadas para cada usuario en segundos, aumentando conversión.</div>
+      </div>
+    </div>
+    <div class="example-item ex-2">
+      <div class="ex-num">2</div>
+      <div>
+        <div class="ex-title">Banco internacional — Detección de fraude con Data Warehouse</div>
+        <div class="ex-text">Integra datos de múltiples canales (ATM, banca web, app móvil) en tiempo casi real → algoritmos de Data Mining analizan el historial del DWH → identifican transacciones anómalas y emiten alertas automáticas en segundos.</div>
+      </div>
+    </div>
+    <div class="example-item ex-3">
+      <div class="ex-num">3</div>
+      <div>
+        <div class="ex-title">Hospital universitario — Historial clínico unificado</div>
+        <div class="ex-text">Integra datos de laboratorio, farmacia, urgencias y admisiones en un repositorio central → el médico accede al historial completo del paciente desde cualquier punto de atención → mejora diagnóstico y reduce duplicación de exámenes.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer mt18">
+    <div class="footer-props">
+      <span class="footer-pill">No volátil</span>
+      <span class="footer-pill">Orientado al sujeto</span>
+      <span class="footer-pill">Integrado</span>
+      <span class="footer-pill">Variante en el tiempo</span>
+      <span class="footer-pill">Soporte a la toma de decisiones</span>
+      <span class="footer-pill">W.H. Inmon, 1990</span>
+    </div>
+    <div class="footer-credit">
+      <strong>Universidad Católica del Norte</strong> · Tecnologías de Información · <strong>Grupo 15</strong>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
